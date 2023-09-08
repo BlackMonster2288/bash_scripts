@@ -1,0 +1,42 @@
+#!/bin/bash
+
+PREFIX=$1
+PATH_IN=$2
+PATH_OUT=$3
+
+generateName() {
+    local result=$(printf "%010d" $1)
+    echo "$PREFIX-$result"
+}
+
+checkFileExist() {
+    files=`ls "$1/$2."* 2>/dev/null`
+
+    if [ "$files" -a ${#files[@]} ]; then
+        echo true
+    else
+        echo false
+    fi
+}
+
+ITEM_INDEX=1
+
+if [ -d $PATH_IN ]; then
+    if [ ! -d $PATH_OUT ]; then
+        mkdir $PATH_OUT
+    fi
+
+    for fileIn in "$PATH_IN/"*; do
+        fileExtension="${fileIn##*.}"
+        fileName=$(generateName $ITEM_INDEX)
+
+        while $(checkFileExist $PATH_OUT $fileName) ; do
+            ITEM_INDEX=$(($ITEM_INDEX+1))
+            fileName=$(generateName $ITEM_INDEX)
+        done
+        
+        cp $fileIn "$PATH_OUT/$fileName.$fileExtension"
+
+        ITEM_INDEX=$(($ITEM_INDEX+1))
+    done
+fi
