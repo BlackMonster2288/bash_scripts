@@ -35,7 +35,7 @@ if [ -d $PATH_IN ]; then
             fileName=$(generateName $ITEM_INDEX)
         done
         
-        cp $fileIn "$PATH_OUT/$fileName.$fileExtension"
+        cp "$fileIn" "$PATH_OUT/$fileName.$fileExtension"
 
         ITEM_INDEX=$(($ITEM_INDEX+1))
     done
